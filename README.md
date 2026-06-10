@@ -17,7 +17,7 @@ A Flask web app for browsing clothing items, reading reviews, searching by keywo
 - Flask
 - Pandas
 - NumPy
-- Gensim GloVe embeddings
+- Lightweight local review-word embeddings
 - Scikit-learn
 - HTML, CSS, and JavaScript
 
@@ -44,7 +44,7 @@ python app.py
 
 4. Open the local Flask URL, usually `http://127.0.0.1:5000`.
 
-The app loads the `glove-wiki-gigaword-100` embedding model through Gensim. On a first run, Gensim may download and cache that model.
+The app uses a compact local embedding cache, `embedding_cache.npz`, so deployment does not need to download a large external word-vector model.
 
 ## Deploy on Render
 
@@ -54,8 +54,8 @@ This project is ready to deploy as a Python web service on Render.
 2. In Render, choose **New** then **Web Service**.
 3. Connect this GitHub repository.
 4. Render can read `render.yaml` automatically. If entering settings manually, use:
-   - Build command: `pip install --upgrade pip setuptools wheel && pip install -r requirements.txt && python -c "import gensim.downloader as api; api.load('glove-wiki-gigaword-100')"`
+   - Build command: `pip install --upgrade pip setuptools wheel && pip install -r requirements.txt`
    - Start command: `gunicorn app:app --bind 0.0.0.0:$PORT`
 5. Add a `SECRET_KEY` environment variable if Render does not generate one automatically.
 
-The first deployment may take a few minutes because the GloVe word embedding model is downloaded during the build. The model is also loaded lazily by the app, so the first review prediction can take longer than normal.
+The app avoids downloading large machine-learning assets during deployment, so free hosting should start more reliably.

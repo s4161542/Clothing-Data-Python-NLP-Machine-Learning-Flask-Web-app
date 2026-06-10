@@ -3,12 +3,23 @@ import pandas as pd
 import pickle
 import numpy as np
 import re
-import gensim.downloader as api
 import os
 from pathlib import Path
 
 
 BASE_DIR = Path(__file__).resolve().parent
+
+
+class LocalEmbeddings:
+    def __init__(self, path):
+        data = np.load(path)
+        self.words = data["words"].tolist()
+        self.vectors = data["vectors"]
+        self.key_to_index = {word: index for index, word in enumerate(self.words)}
+        self.vector_size = self.vectors.shape[1]
+
+    def __getitem__(self, word):
+        return self.vectors[self.key_to_index[word]]
 
 
 def docvecs(embeddings, docs):
@@ -141,16 +152,16 @@ with open(BASE_DIR / "logistic_regression_model.pkl", "rb") as file:
     model = pickle.load(file)
 
 
-glove_model = None
+embedding_model = None
 
 
-def get_glove_model():
-    global glove_model
+def get_embedding_model():
+    global embedding_model
 
-    if glove_model is None:
-        glove_model = api.load("glove-wiki-gigaword-100")
+    if embedding_model is None:
+        embedding_model = LocalEmbeddings(BASE_DIR / "embedding_cache.npz")
 
-    return glove_model
+    return embedding_model
 
 
 def predict_recommendation(review_title, review_description):
@@ -161,7 +172,7 @@ def predict_recommendation(review_title, review_description):
     tokenized_review = tokenize(review_text)
 
     # Converting the tokenized review into a GloVe document vector.
-    review_vector = docvecs(get_glove_model(), [tokenized_review])
+    review_vector = docvecs(get_embedding_model(), [tokenized_review])
 
     # Predicting whether the review recommends the item or not.
     prediction = model.predict(review_vector)
