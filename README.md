@@ -54,7 +54,7 @@ This project is ready to deploy as a Python web service on Render.
 2. In Render, choose **New** then **Web Service**.
 3. Connect this GitHub repository.
 4. Render can read `render.yaml` automatically. If entering settings manually, use:
-   - Build command: `pip install -r requirements.txt && python -c "import gensim.downloader as api; api.load('glove-wiki-gigaword-100')"`
+   - Build command: `pip install --upgrade pip setuptools wheel && pip install -r requirements.txt && python -c "import gensim.downloader as api; api.load('glove-wiki-gigaword-100')"`
    - Start command: `gunicorn app:app`
 5. Add a `SECRET_KEY` environment variable if Render does not generate one automatically.
 

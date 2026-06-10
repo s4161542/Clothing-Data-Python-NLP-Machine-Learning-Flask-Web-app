@@ -3,7 +3,7 @@ services:
     name: clothing-recommendation-flask-app
     env: python
     plan: free
-    buildCommand: pip install -r requirements.txt && python -c "import gensim.downloader as api; api.load('glove-wiki-gigaword-100')"
+    buildCommand: pip install --upgrade pip setuptools wheel && pip install -r requirements.txt && python -c "import gensim.downloader as api; api.load('glove-wiki-gigaword-100')"
     startCommand: gunicorn app:app
     envVars:
       - key: PYTHON_VERSION
