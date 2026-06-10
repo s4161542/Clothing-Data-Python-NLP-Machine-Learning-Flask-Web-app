@@ -45,3 +45,17 @@ python app.py
 4. Open the local Flask URL, usually `http://127.0.0.1:5000`.
 
 The app loads the `glove-wiki-gigaword-100` embedding model through Gensim. On a first run, Gensim may download and cache that model.
+
+## Deploy on Render
+
+This project is ready to deploy as a Python web service on Render.
+
+1. Push the project to GitHub.
+2. In Render, choose **New** then **Web Service**.
+3. Connect this GitHub repository.
+4. Render can read `render.yaml` automatically. If entering settings manually, use:
+   - Build command: `pip install -r requirements.txt && python -c "import gensim.downloader as api; api.load('glove-wiki-gigaword-100')"`
+   - Start command: `gunicorn app:app`
+5. Add a `SECRET_KEY` environment variable if Render does not generate one automatically.
+
+The first deployment may take a few minutes because the GloVe word embedding model is downloaded during the build.

@@ -4,6 +4,11 @@ import pickle
 import numpy as np
 import re
 import gensim.downloader as api
+import os
+from pathlib import Path
+
+
+BASE_DIR = Path(__file__).resolve().parent
 
 
 def docvecs(embeddings, docs):
@@ -70,10 +75,10 @@ def tokenize(text):
 
 # Flask app.
 app = Flask(__name__)
-app.secret_key = "shopping_secret_key"
-\
+app.secret_key = os.environ.get("SECRET_KEY", "shopping_secret_key")
+
 # Parsing the  CSV file.
-clothes_data = pd.read_csv("assignment3_II.csv")
+clothes_data = pd.read_csv(BASE_DIR / "assignment3_II.csv")
 
 # Filling missing values of text columns .
 text_columns = [
@@ -136,7 +141,7 @@ glove_model = api.load("glove-wiki-gigaword-100")
 
 
 # Loading the saved Logistic Regression model.
-with open("logistic_regression_model.pkl", "rb") as file:
+with open(BASE_DIR / "logistic_regression_model.pkl", "rb") as file:
     model = pickle.load(file)
 
 
@@ -432,7 +437,8 @@ def about():
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host="0.0.0.0", port=port, debug=os.environ.get("FLASK_DEBUG") == "1")
 
 
 #References:
