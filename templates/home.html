@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% block title %}Home - Clothing Shop{% endblock %}
+
+{% block content %}
+<section class="hero">
+    <div>
+        <h1>Find your next favourite outfit</h1>
+        <p>Search clothing items by category, title, description, or review keywords.</p>
+
+        <form class="search-form" action="{{ url_for('search') }}" method="POST">
+            <input type="text" name="searchword" placeholder="Try dress, tops, jacket..." required>
+            <button type="submit" name="search" value="Search">Search</button>
+        </form>
+    </div>
+
+    <div class="hero-panel" aria-label="Store highlights">
+        <div class="hero-stat">
+            <strong>{{ departments|length }}</strong>
+            <span>Departments</span>
+        </div>
+        <div class="hero-stat">
+            <strong>{{ featured_items|length }}</strong>
+            <span>Featured picks</span>
+        </div>
+    </div>
+</section>
+
+<section>
+    <div class="section-heading">
+        <div>
+            <h2>Shop by Category</h2>
+            <p>Browse curated departments from the review catalogue.</p>
+        </div>
+    </div>
+    <div class="category-grid">
+        {% for department in departments %}
+            <a class="category-card" href="{{ url_for('category', department_name=department) }}">{{ department }}</a>
+        {% endfor %}
+    </div>
+</section>
+
+<section>
+    <div class="section-heading">
+        <div>
+            <h2>Featured items</h2>
+            <p>Popular catalogue pieces with customer recommendation signals.</p>
+        </div>
+    </div>
+    <div class="item-grid">
+        {% for item in featured_items %}
+            {% include "item_card.html" %}
+        {% endfor %}
+    </div>
+</section>
+{% endblock %}

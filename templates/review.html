@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block title %}Saved Review - Clothing Shop{% endblock %}
+
+{% block content %}
+<div class="page-heading">
+    <div>
+        <h1>Review saved</h1>
+        <p>Your review is now accessible using this URL.</p>
+    </div>
+</div>
+
+<article class="saved-review">
+    <h2>{{ review['Title'] }}</h2>
+    <p>{{ review['Review Text'] }}</p>
+    <div class="pill-row">
+        <span class="pill">{{ item['Clothes Title'] }}</span>
+        <span class="pill">Rating {{ review['Rating'] }}</span>
+        <span class="pill {% if review['Recommended IND']|int == 1 %}good{% else %}warn{% endif %}">
+            {% if review['Recommended IND']|int == 1 %}Recommended{% else %}Not recommended{% endif %}
+        </span>
+        <span class="pill">ID {{ review['Review ID'] }}</span>
+    </div>
+</article>
+
+<a class="button-link" href="{{ url_for('item_detail', clothing_id=review['Clothing ID']) }}">Back to item</a>
+{% endblock %}

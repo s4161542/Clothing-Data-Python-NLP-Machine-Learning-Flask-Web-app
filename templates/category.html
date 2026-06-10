@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}{{ department_name }} - Clothing Shop{% endblock %}
+
+{% block content %}
+<div class="page-heading">
+    <div>
+        <h1>{{ department_name }}</h1>
+        <p>{{ item_count }} items found in this department.</p>
+    </div>
+    <a class="button-link button-secondary" href="{{ url_for('index') }}">Back home</a>
+</div>
+
+<div class="item-grid">
+    {% for item in items %}
+        {% include "item_card.html" %}
+    {% endfor %}
+</div>
+{% endblock %}

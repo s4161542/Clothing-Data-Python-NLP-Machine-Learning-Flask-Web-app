@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+{% block title %}{{ item['Clothes Title'] }} - Clothing Shop{% endblock %}
+
+{% block content %}
+<section class="item-detail">
+    <div class="large-image-placeholder"><span>{{ item['Department Name'] }}</span></div>
+
+    <div class="item-copy">
+        <h1>{{ item['Clothes Title'] }}</h1>
+        <p class="item-description">{{ item['Clothes Description'] }}</p>
+
+        <div class="pill-row">
+            <span class="pill">{{ item['Department Name'] }}</span>
+            <span class="pill">{{ item['Class Name'] }}</span>
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <strong>{{ stats.average_rating }}</strong>
+                <span>Avg rating</span>
+            </div>
+            <div class="stat-card">
+                <strong>{{ stats.recommend_percent }}%</strong>
+                <span>Recommend</span>
+            </div>
+            <div class="stat-card">
+                <strong>{{ stats.review_count }}</strong>
+                <span>Reviews</span>
+            </div>
+        </div>
+
+        <a class="button-link" href="{{ url_for('add_review', clothing_id=item['Clothing ID']) }}">Add a review</a>
+    </div>
+</section>
+
+<section>
+    <div class="section-heading">
+        <div>
+            <h2>Customer reviews</h2>
+            <p>Original dataset reviews and any reviews added in this session.</p>
+        </div>
+    </div>
+
+    {% if reviews %}
+        <div class="review-list">
+        {% for review in reviews %}
+            <article class="review-card">
+                <h3>{{ review['Title'] }}</h3>
+                <p>{{ review['Review Text'] }}</p>
+                <div class="pill-row">
+                    <span class="pill">Rating {{ review['Rating'] }}</span>
+                    <span class="pill {% if review['Recommended IND']|int == 1 %}good{% else %}warn{% endif %}">
+                        {% if review['Recommended IND']|int == 1 %}Recommended{% else %}Not recommended{% endif %}
+                    </span>
+                    <span class="pill">Age {{ review['Age'] }}</span>
+                    <span class="pill">{{ review['Source'] }}</span>
+                </div>
+
+                {% if review['Review ID'] %}
+                    <a class="button-link" href="{{ url_for('review_detail', review_id=review['Review ID']) }}">View saved review</a>
+                {% endif %}
+            </article>
+        {% endfor %}
+        </div>
+    {% else %}
+        <p>No reviews found for this item.</p>
+    {% endif %}
+</section>
+{% endblock %}

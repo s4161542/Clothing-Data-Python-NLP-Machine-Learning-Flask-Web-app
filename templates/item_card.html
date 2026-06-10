@@ -1,0 +1,18 @@
+<article class="item-card">
+    <div class="image-placeholder"><span>{{ item['Department Name'] }}</span></div>
+
+    <div class="item-card-body">
+        <h3>{{ item['Clothes Title'] }}</h3>
+        <p>{{ item['Clothes Description'] }}</p>
+
+        <div class="pill-row">
+            <span class="pill">{{ item['Class Name'] }}</span>
+            <span class="pill">Rating {{ item['Rating'] }}</span>
+            <span class="pill {% if item['Recommended IND']|int == 1 %}good{% else %}warn{% endif %}">
+                {% if item['Recommended IND']|int == 1 %}Recommended{% else %}Mixed feedback{% endif %}
+            </span>
+        </div>
+
+        <a class="button-link" href="{{ url_for('item_detail', clothing_id=item['Clothing ID']) }}">View item</a>
+    </div>
+</article>

@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+{% block title %}Add Review - Clothing Shop{% endblock %}
+
+{% block content %}
+<div class="page-heading">
+    <div>
+        <h1>Add review</h1>
+        <p>{{ item['Clothes Title'] }} - {{ item['Clothes Description'] }}</p>
+    </div>
+    <a class="button-link button-secondary" href="{{ url_for('item_detail', clothing_id=item['Clothing ID']) }}">Back to item</a>
+</div>
+
+<form class="review-form" action="{{ url_for('add_review', clothing_id=item['Clothing ID']) }}" method="POST">
+    <label for="title">Review title</label>
+    <input type="text" id="title" name="title" value="{{ title or '' }}" required>
+
+    <label for="description">Review description</label>
+    <textarea id="description" name="description" rows="7" required>{{ description or '' }}</textarea>
+
+    <label for="rating">Rating</label>
+    <select id="rating" name="rating" required>
+        {% for number in [1, 2, 3, 4, 5] %}
+            <option value="{{ number }}" {% if rating|string == number|string %}selected{% endif %}>
+                {{ number }}
+            </option>
+        {% endfor %}
+    </select>
+
+    <label for="age">Your age</label>
+    <input type="number" id="age" name="age" value="{{ age or '' }}" min="10" max="100" required>
+
+    <button type="submit" name="button" value="Predict Recommendation">
+        Predict Recommendation
+    </button>
+
+    {% if prediction != "" %}
+        <div class="prediction-box">
+            <h2>Model recommendation</h2>
+
+            <p>
+                The model predicts:
+                <strong>
+                    {% if prediction == 1 %}
+                        Recommended
+                    {% else %}
+                        Not Recommended
+                    {% endif %}
+                </strong>
+            </p>
+
+            <label for="recommendation">Final recommendation</label>
+            <select id="recommendation" name="recommendation" required>
+                <option value="1" {% if prediction == 1 %}selected{% endif %}>
+                    1 - Recommended
+                </option>
+                <option value="0" {% if prediction == 0 %}selected{% endif %}>
+                    0 - Not Recommended
+                </option>
+            </select>
+
+            <button type="submit" name="button" value="Save Review">
+                Submit Review
+            </button>
+        </div>
+    {% endif %}
+</form>
+{% endblock %}

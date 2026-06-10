@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Clothing Shop{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <header class="site-header">
+        <div class="header-inner">
+            <div class="brand">
+                <a href="{{ url_for('index') }}">
+                    <span class="brand-mark">CS</span>
+                    <span>Clothing Shop</span>
+                </a>
+            </div>
+
+            <nav class="nav-links" aria-label="Main navigation">
+                <a href="{{ url_for('index') }}">Home</a>
+                {% for department in departments %}
+                    <a href="{{ url_for('category', department_name=department) }}">{{ department }}</a>
+                {% endfor %}
+                <a href="{{ url_for('about') }}">About</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="footer">
+        <p>Clothing recommendations powered by Flask and machine learning.</p>
+    </footer>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
