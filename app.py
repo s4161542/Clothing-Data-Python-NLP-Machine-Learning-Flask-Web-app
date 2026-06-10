@@ -136,13 +136,21 @@ user_reviews = pd.DataFrame(
     ]
 )
 
-# Loading the glove model.
-glove_model = api.load("glove-wiki-gigaword-100")
-
-
 # Loading the saved Logistic Regression model.
 with open(BASE_DIR / "logistic_regression_model.pkl", "rb") as file:
     model = pickle.load(file)
+
+
+glove_model = None
+
+
+def get_glove_model():
+    global glove_model
+
+    if glove_model is None:
+        glove_model = api.load("glove-wiki-gigaword-100")
+
+    return glove_model
 
 
 def predict_recommendation(review_title, review_description):
@@ -153,7 +161,7 @@ def predict_recommendation(review_title, review_description):
     tokenized_review = tokenize(review_text)
 
     # Converting the tokenized review into a GloVe document vector.
-    review_vector = docvecs(glove_model, [tokenized_review])
+    review_vector = docvecs(get_glove_model(), [tokenized_review])
 
     # Predicting whether the review recommends the item or not.
     prediction = model.predict(review_vector)
